@@ -85,11 +85,15 @@ class Sobrecupo
           const actual_time = new Date("01/01/2022 "+hour+":00")
           const class_time_ini = new Date("01/01/2022 "+availability[0]+":00")
           const class_time_fin = new Date("01/01/2022 "+availability[1]+":00")
+
+          //Revisar si actualmente se esta dando clase en dicho salon
           if (actual_time >= class_time_ini && actual_time <=class_time_fin)
           {
             minimum_time = new Date("01/01/2022 23:59:59")
             break
           }
+
+          //Buscar cual es la clase mas cercana
           if (actual_time < class_time_ini && class_time_ini <= minimum_time)
           {
             minimum_time = class_time_ini
@@ -114,11 +118,15 @@ class Sobrecupo
             const actual_time = new Date("01/01/2022 "+hour+":00")
             const class_time_ini = new Date("01/01/2022 "+availability[0]+":00")
             const class_time_fin = new Date("01/01/2022 "+availability[1]+":00")
+
+            //Revisar si actualmente se esta dando clase en dicho salon
             if (actual_time >= class_time_ini && actual_time <=class_time_fin)
             {
               minimum_time = new Date("01/01/2022 23:59:59")
               break
             }
+            
+            //Buscar cual es la clase mas cercana
             if (actual_time < class_time_ini && class_time_ini <= minimum_time)
             {
               minimum_time = class_time_ini
