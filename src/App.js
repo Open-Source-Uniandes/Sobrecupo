@@ -42,7 +42,7 @@ class Sobrecupo
           // let building_name = clasroom.split(" ")[0]
           // let room_name = clasroom.split(" ")[1]
           let building_name = element.class
-          let room_name = element.course.slice(0,2)
+          let room_name = element.course
 
           if (this.buildings[building_name] == null)
           {
@@ -65,16 +65,16 @@ class Sobrecupo
       } 
     }
     console.log("All classes were loaded correctly")
-
+    console.log(this.buildings)
     //TODO
     // console.log(this.getAvailableRooms(1, "06:30"))
-    console.log(this.getAvailableRooms(0, "06:30","ADMI",3))
+    console.log(this.getAvailableRooms(0, "06:30","ADMI", undefined))
+    //console.log(this.buildings["ADMI"].getRoom("11").isAvailable(0, "11:00"))
   }
 
   getAvailableRooms(day, hour, building=undefined, floor=undefined)
   {
-    let available_rooms = {}
-    var minimum_time = new Date("01/01/2022 23:59:59")
+    let available_rooms = []
     for (let building_name in this.buildings)
     {
       //Revisa si el edificio es el correcto en caso dado que sea dado por parametro
@@ -85,42 +85,16 @@ class Sobrecupo
         //Revisar si el piso es el correcto en caso dado que haya piso
         if(floor !== undefined && room_name.slice(0,1) != floor){continue}
         const room = this.buildings[building_name].rooms[room_name]
-        minimum_time = new Date("01/01/2022 23:59:59")
-        let occupied = false
-
-        //TODO esto meterlo al room
-        for (let availability of room.availability[day])
-        {
-          const actual_time = new Date("01/01/2022 "+hour+":00")
-          const class_time_ini = new Date("01/01/2022 "+availability[0]+":00")
-          const class_time_fin = new Date("01/01/2022 "+availability[1]+":00")
-
-          //Revisar si actualmente se esta dando clase en dicho salon
-          if (actual_time >= class_time_ini && actual_time <=class_time_fin)
-          {
-            minimum_time =  class_time_fin
-            occupied = true            
-          }
-
-          //Buscar cual es la clase mas cercana
-          else if (actual_time < class_time_ini && class_time_ini <= minimum_time)
-          {
-            minimum_time = class_time_ini
-          }
-        }
-
-
-        available_rooms["room"]=building_name+room_name
-        available_rooms["time"]=minimum_time
-
-        if (!occupied) {available_rooms["available"]=true}    
-        else {available_rooms["available"]=false}
+        let room_availability = room.isAvailable(day, hour)
+        room_availability["room"] = building_name+room_availability["room"]
+        available_rooms.push(room_availability)
       }
     }
     return available_rooms
 
     //[{"ML001","5:30",1},{"ML002","4:30",2},{"ML002","5:30",3}]
-
+    //[{"ML001", "True", "5:30"}, {"ML002", False, "5:30", 10}]
+    // [[],[],[]]
     //1:Disponible mas de x tiempo ->verde 
     //2:Disponible menos de x tiempo ->naranja
     //3:No disponible -> rojo
@@ -164,6 +138,32 @@ class Room
   {
     let auxAvailability = [availability[0].slice(0, 2) + ":" + availability[0].slice(2) , availability[1].slice(0, 2) + ":" + availability[1].slice(2)]
     this.availability[day].push(auxAvailability);
+  }
+
+  isAvailable(day, hour){
+    let todayAvailability = this.availability[day]
+    let isBusy = false
+    let minDifference = null
+    let nextTime = "23:59"
+    let stopBusy = null
+    for (let availability of todayAvailability){
+      let difference = this.differenceHours(availability[0], hour)
+      if(difference>0 && (minDifference === null || difference < minDifference)){
+        minDifference = difference
+        nextTime = availability[0]
+      }
+      if(hour>=availability[0] && hour<=availability[1]){
+        stopBusy = availability[1]
+        isBusy = true
+      }
+    }
+    if (isBusy){return {"room":this.name, "available":!isBusy, "time":stopBusy, "after":nextTime}}
+    else {return {"room":this.name, "available":!isBusy, "time":nextTime}} 
+  }
+
+  differenceHours(hour_a, hour_b){
+    var dot = (a, b) => a.map((x, i) => a[i] * b[i]).reduce((m, n) => m + n);
+    return dot(hour_a.split(":").map(Number), [60,1])-dot(hour_b.split(":").map(Number), [60,1])
   }
 
 }
