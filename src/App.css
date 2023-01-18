@@ -67,3 +67,7 @@ main {
   flex-direction: column;
   gap: 10px;
 }
+
+.avoid-underline {
+  text-decoration: none;  
+}

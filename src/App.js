@@ -1,5 +1,5 @@
 import './App.css';
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Context from './Context';
 import Welcome from './Welcome/Welcome';
@@ -72,10 +72,10 @@ class Sobrecupo
       } 
     }
     console.log("All classes were loaded correctly")
-    console.log(this.buildings)
+    console.log(this)
     //TODO
-    // console.log(this.getAvailableRooms(1, "06:30"))
-    console.log(this.getAvailableRooms(0, "06:30","ADMI", undefined))
+    //console.log(this.getAvailableRooms(1, "06:30"))
+    //console.log(this.getAvailableRooms(0, "06:30","ADMI", undefined))
     //console.log(this.buildings["ADMI"].getRoom("11").isAvailable(0, "11:00"))
   }
 
@@ -175,12 +175,84 @@ class Room
 
 }
 
+/* APP */
+
+const days = ['l', 'm', 'i', 'j', 'v', 's', 'd'];
+
+const intialize = async () => {
+  const buildings = {};
+  // const response = await fetch("https://ofertadecursos.uniandes.edu.co/api/courses?term=&ptrm=&prefix=&attr=&nameInput=&campus=CAMPUS%20PRINCIPAL&attrs=&timeStart=&offset=&limit=1")
+  let response = await fetch("https://ofertadecursos.uniandes.edu.co/api/courses?term=&ptrm=&prefix=&attr=&nameInput=&campus=CAMPUS%20PRINCIPAL&attrs=&timeStart=&offset=0&limit=800")
+  response = await response.json();
+  //TODO
+  let actual_date = new Date("2023-03-03")
+  for (let element of response) {
+    for (let pattern of element.schedules) {
+      let date_ini = new Date(pattern.date_ini)
+      let date_fin = new Date(pattern.date_fin)
+      if (date_ini <= actual_date && date_fin >= actual_date) {
+
+        //TODO
+        // let clasroom = pattern.clasroom
+        // let building_name = clasroom.split(" ")[0]
+        // let room_name = clasroom.split(" ")[1]
+        let building_name = element.class
+        let room_name = element.course
+
+        if (buildings[building_name] == null) {
+          buildings[building_name] = new Building(building_name);
+        }
+
+        let room = new Room(room_name);
+        if (buildings[building_name].getRoom(room_name) == null) {
+          buildings[building_name].addRoom(room);
+        }
+
+        for (let day=0; day<=6; day++) {
+          if (pattern[days[day]] !== null) {
+            buildings[building_name].getRoom(room_name).addAvailability(day, [pattern.time_ini, pattern.time_fin]);
+          }
+        }
+        buildings[building_name].addRoom(room);
+      }
+    } 
+  }
+  console.log("All classes were loaded correctly");
+  console.log(buildings);
+  return buildings;
+  //TODO
+  //console.log(getAvailableRooms(1, "06:30"))
+  //console.log(getAvailableRooms(0, "06:30","ADMI", undefined))
+  //console.log(buildings["ADMI"].getRoom("11").isAvailable(0, "11:00"))
+}
+
 const App = () => {
-  const sobrecupo = new Sobrecupo();
+  const [data, setData] = useState(undefined);
+
+  useEffect(() => {
+    const _ = async () => {
+      const dt = await intialize();
+      setData(dt);
+    }
+
+    console.log('Fetching data from API...');
+
+    let i = 0, retries = 3;
+    while (i < retries) {
+      try {
+        _();
+        break;
+      } catch (error) {
+        console.log("There was an error and the courses were not loaded");
+        i++;
+      }
+    }
+  }, []);
+
   return (
     <div className="App">
       <Context.Provider 
-        value={sobrecupo}
+        value={{data}}
       >
         <Header/>
           <BrowserRouter>

@@ -4,6 +4,7 @@ import Context from '../Context';
 
 const Classrooms = () => {
     const ctx = useContext(Context);
+
     return (
       <React.Fragment>
         <main>
