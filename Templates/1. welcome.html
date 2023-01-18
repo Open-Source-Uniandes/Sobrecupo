@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Params generales de las 3 pantallas -->
+    <title>Sobrecupo</title>
+    <meta name="description" content="Encuentra salones disponibles en solo un click 💛">
+    <link rel="shortcut icon" type="image/png" href="https://registroapps.uniandes.edu.co/SisAdmisiones/Pregrado/img/Seneca-01.png"/>
+    <!-- Estilos de esta pantalla -->
+    <style>
+
+    /* Estilos genéricos: El mismo para las 3 pantallas*/
+    :root {
+        --light-gray: #dadce0;
+        --dark-gray: #494951;
+        --yellow: #fff353;
+        --strong-yellow: #f6c551;
+        --pastel-red: #ff6961;
+        --pastel-green: #ceffc9;
+    }
+    * {
+
+        /* Reset box model */
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+
+        /* Default font settings */
+        font-family: sans-serif;
+        color: var(--dark-gray);
+    }
+
+    /* Estilos del Encabezado: El mismo para las 3 pantallas */
+    header {
+        height: 80px;
+        background-color: var(--yellow);
+        border-bottom: 1px solid var(--dark-gray);
+        font-size: 16px;
+        font-weight: 700;
+        text-align: center;
+        position: relative;
+        /* Centrar */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Estilos genéricos del Main: El mismo para las 3 pantallas*/
+    main {
+        margin: 20px 30px;
+    }
+
+    /* Estilos de los párrafos de información. Aplican solo a esta pantalla */
+    .information p {
+        margin: 10px 0;
+        text-align: justify;
+    }
+
+    /* Estilo del espacio de la animación de carga. Aplican solo a esta pantalla */
+    #loading-placeholder {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Estilos del botón para iniciar la aplicación. Aplican solo a esta pantalla */
+    #btn-start {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 20px;
+        border: 2px solid var(--dark-gray);
+        border-radius: 5px;
+        background-color: var(--yellow);
+
+        color: var(--dark-gray);
+        font-weight: 700;
+        font-size: 20px;
+
+        cursor: pointer;
+    }
+
+    /* Clase para desactivar un elemento. Solo se usa en esta pantalla*/
+    .inactive {
+        display: none !important;
+    }
+
+    /* Estilos del pie de página: El mismo para las 3 pantallas */
+    footer {
+        padding-bottom: 20px;
+        /* Centrar */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Animaciones de carga. Aplican solo a esta pantalla */
+    .lds-ring {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+    }
+    .lds-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border: 8px solid var(--yellow);
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: var(--yellow) transparent transparent transparent;
+    }
+    .lds-ring div:nth-child(1) {
+        animation-delay: -0.45s;
+    }
+    .lds-ring div:nth-child(2) {
+        animation-delay: -0.3s;
+    }
+    .lds-ring div:nth-child(3) {
+        animation-delay: -0.15s;
+    }  
+    @keyframes lds-ring {
+        0% {
+        transform: rotate(0deg);
+        }
+        100% {
+        transform: rotate(360deg);
+        }
+    }
+
+    </style>
+</head>
+<body>
+    <!-- Encabezado: El mismo para las 3 pantallas -->
+    <header>
+        <h1>Sobrecupo</h1>
+    </header>
+    
+    <main>
+        <!-- Texto de bienvenida -->
+        <section>
+
+            <article class="information">
+                <h2>Lorem ipsum dolor sit amet.</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet id eius voluptatum eum atque voluptas doloremque, numquam reiciendis laudantium ipsa cupiditate architecto quaerat dicta necessitatibus repellat sint temporibus dolor delectus velit soluta adipisci! Necessitatibus consequatur dicta atque</p>        
+            </article>
+
+            <article class="information">
+                <h2>Lorem ipsum dolor sit amet.</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet id eius voluptatum eum atque voluptas doloremque, numquam reiciendis laudantium ipsa cupiditate architecto quaerat dicta necessitatibus repellat sint temporibus dolor delectus velit soluta adipisci! Necessitatibus consequatur dicta atque</p>        
+            </article>
+
+            <article class="information">
+                <h2>Lorem ipsum dolor sit amet.</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet id eius voluptatum eum atque voluptas doloremque, numquam reiciendis laudantium ipsa cupiditate architecto quaerat dicta necessitatibus repellat sint temporibus dolor delectus velit soluta adipisci! Necessitatibus consequatur dicta atque</p>        
+            </article>
+
+        </section>
+
+        <!-- Iniciar la aplicación -->
+        <section>
+
+            <!-- Animación de carga -->
+            <div id="loading-placeholder" class="">
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                <p><em>Un momento por favor <br> Estamos Hackeando Banner</em> 😎</p>
+            </div>
+
+            <!-- Botón para iniciar la aplicación -->
+            <button id="btn-start" class="inactive" type="button">Encuentra salones</button>
+
+        </section>
+
+    </main>
+
+    <!-- Información del proyecto: El mismo para las 3 pantallas -->
+    <footer>
+        <p>Hecho con 💛 en Uniandes</p>
+        <p><strong><a href="">Sé parte de este proyecto aquí</a></strong></p>
+    </footer>
+
+</body>
+</html>
