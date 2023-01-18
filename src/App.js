@@ -158,7 +158,7 @@ class Room
       }
     }
     if (isBusy){return {"room":this.name, "available":!isBusy, "time":stopBusy, "after":nextTime}}
-    else {return {"room":this.name, "available":!isBusy, "time":nextTime}} 
+    else {return {"room":this.name, "available":!isBusy, "time":nextTime, "after": undefined}} 
   }
 
   differenceHours(hour_a, hour_b){
