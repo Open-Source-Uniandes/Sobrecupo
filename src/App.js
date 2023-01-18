@@ -233,6 +233,8 @@ const App = () => {
     const _ = async () => {
       const dt = await intialize();
       setData(dt);
+      localStorage.setItem('classrooms', JSON.stringify(dt));
+      localStorage.setItem('last-update', new Date());
     }
 
     console.log('Fetching data from API...');
