@@ -87,6 +87,8 @@ class Sobrecupo
         const room = this.buildings[building_name].rooms[room_name]
         minimum_time = new Date("01/01/2022 23:59:59")
         let occupied = false
+
+        //TODO esto meterlo al room
         for (let availability of room.availability[day])
         {
           const actual_time = new Date("01/01/2022 "+hour+":00")
@@ -106,6 +108,7 @@ class Sobrecupo
             minimum_time = class_time_ini
           }
         }
+
 
         available_rooms["room"]=building_name+room_name
         available_rooms["time"]=minimum_time
