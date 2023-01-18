@@ -1,5 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Context from './Context';
+import Welcome from './Welcome/Welcome';
+import Header from './Header/Header';
+import Footer from './Footer/Footer';
+import Buildings from './Buildings/Buildings';
+import Classrooms from './Classrooms/Classrooms';
 
 class Sobrecupo
 {
@@ -55,7 +62,7 @@ class Sobrecupo
           }
           for (let day=0; day<=6; day++)
           {
-            if (pattern[this.days[day]] != null)
+            if (pattern[this.days[day]] !== null)
             {
               this.buildings[building_name].getRoom(room_name).addAvailability(day, [pattern.time_ini, pattern.time_fin])
             }
@@ -83,7 +90,7 @@ class Sobrecupo
       for (let room_name in this.buildings[building_name].rooms)
       {
         //Revisar si el piso es el correcto en caso dado que haya piso
-        if(floor !== undefined && room_name.slice(0,1) != floor){continue}
+        if(floor !== undefined && room_name.slice(0,1) !== floor){continue}
         const room = this.buildings[building_name].rooms[room_name]
         let room_availability = room.isAvailable(day, hour)
         room_availability["room"] = building_name+room_availability["room"]
@@ -168,25 +175,23 @@ class Room
 
 }
 
-function App() {
+const App = () => {
   const sobrecupo = new Sobrecupo();
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {/* {sobrecupo.response[1]} */}
-          Learn React bla bla
-        </a>
-      </header>
+      <Context.Provider 
+        value={sobrecupo}
+      >
+        <Header/>
+          <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Welcome/>}/>
+            <Route path="/buildings" element={<Buildings/>}/>
+            <Route path="/classrooms" element={<Classrooms/>}/>
+          </Routes>
+          </BrowserRouter>
+        <Footer/>
+      </Context.Provider>
     </div>
   );
 }

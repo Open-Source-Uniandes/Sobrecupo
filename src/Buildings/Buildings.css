@@ -1,0 +1,21 @@
+.building-card {
+    border: 1px solid var(--strong-yellow);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.building-card :first-child { /* Building name */
+    padding: 10px 5px;
+    text-align: center;
+}
+
+.building-card :last-child { /* Building availability text */
+    padding: 5px 5px;
+    text-align: center;
+    background-color: papayawhip;
+}
+
+.building-card :last-child span { /* Building availability number */
+    padding: 0;
+    font-weight: 700;
+}

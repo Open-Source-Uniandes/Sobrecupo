@@ -1,0 +1,30 @@
+header {
+    height: 80px;
+    background-color: var(--yellow);
+    border-bottom: 1px solid var(--dark-gray);
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+    /* Centrar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header .arrow-back svg {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    width: 40px;
+    height: 40px;
+    fill: var(--dark-gray);
+    border: 1px solid var(--dark-gray);
+    border-radius: 50%;
+}
+
+header .svg-icon {
+    vertical-align: middle;
+    fill: currentColor;
+    overflow: hidden;
+}
