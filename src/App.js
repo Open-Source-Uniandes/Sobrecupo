@@ -65,6 +65,9 @@ class Sobrecupo
       } 
     }
     console.log("All classes were loaded correctly")
+
+    //TODO
+    // console.log(this.getAvailableRooms(1, "06:30"))
     console.log(this.getAvailableRooms(0, "06:30","ADMI",3))
   }
 
@@ -72,14 +75,18 @@ class Sobrecupo
   {
     let available_rooms = {}
     var minimum_time = new Date("01/01/2022 23:59:59")
-    if (this.buildings[building] != null)
+    for (let building_name in this.buildings)
     {
-      for (let room_name in this.buildings[building].rooms)
+      //Revisa si el edificio es el correcto en caso dado que sea dado por parametro
+      if(building !== undefined && building_name !== building){continue}
+      
+      for (let room_name in this.buildings[building_name].rooms)
       {
         //Revisar si el piso es el correcto en caso dado que haya piso
         if(floor !== undefined && room_name.slice(0,1) != floor){continue}
-        var room = this.buildings[building].rooms[room_name]
+        const room = this.buildings[building_name].rooms[room_name]
         minimum_time = new Date("01/01/2022 23:59:59")
+        let occupied = false
         for (let availability of room.availability[day])
         {
           const actual_time = new Date("01/01/2022 "+hour+":00")
@@ -89,57 +96,32 @@ class Sobrecupo
           //Revisar si actualmente se esta dando clase en dicho salon
           if (actual_time >= class_time_ini && actual_time <=class_time_fin)
           {
-            minimum_time = new Date("01/01/2022 23:59:59")
-            break
+            minimum_time =  class_time_fin
+            occupied = true            
           }
 
           //Buscar cual es la clase mas cercana
-          if (actual_time < class_time_ini && class_time_ini <= minimum_time)
+          else if (actual_time < class_time_ini && class_time_ini <= minimum_time)
           {
             minimum_time = class_time_ini
           }
         }
-        if (minimum_time.toString() !== (new Date("01/01/2022 23:59:59")).toString())
-        {
-          available_rooms[building+room_name] = minimum_time
-        }
-      }
-    }
-    else
-    {
-      for (let building_name in this.buildings)
-      {
-        for (let room_name in this.buildings[building_name].rooms)
-        {
-          const room = this.buildings[building_name].rooms[room_name]
-          minimum_time = new Date("01/01/2022 23:59:59")
-          for (let availability of room.availability[day])
-          {
-            const actual_time = new Date("01/01/2022 "+hour+":00")
-            const class_time_ini = new Date("01/01/2022 "+availability[0]+":00")
-            const class_time_fin = new Date("01/01/2022 "+availability[1]+":00")
 
-            //Revisar si actualmente se esta dando clase en dicho salon
-            if (actual_time >= class_time_ini && actual_time <=class_time_fin)
-            {
-              minimum_time = new Date("01/01/2022 23:59:59")
-              break
-            }
-            
-            //Buscar cual es la clase mas cercana
-            if (actual_time < class_time_ini && class_time_ini <= minimum_time)
-            {
-              minimum_time = class_time_ini
-            }
-          }
-          if (minimum_time.toString() !== (new Date("01/01/2022 23:59:59")).toString())
-          {
-            available_rooms[building_name+room_name] = minimum_time
-          }
-        }
+        available_rooms["room"]=building_name+room_name
+        available_rooms["time"]=minimum_time
+
+        if (!occupied) {available_rooms["available"]=true}    
+        else {available_rooms["available"]=false}
       }
     }
     return available_rooms
+
+    //[{"ML001","5:30",1},{"ML002","4:30",2},{"ML002","5:30",3}]
+
+    //1:Disponible mas de x tiempo ->verde 
+    //2:Disponible menos de x tiempo ->naranja
+    //3:No disponible -> rojo
+
   }
 }
 
