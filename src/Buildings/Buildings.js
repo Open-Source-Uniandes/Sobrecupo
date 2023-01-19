@@ -4,6 +4,11 @@ import Context from '../Context';
 
 const Buildings = () => {
     const ctx = useContext(Context);
+
+    if (!ctx.data) {
+        window.location.href = '/'; // redirect to home
+    }
+
     return (
       <React.Fragment>
         <main>

@@ -1,9 +1,10 @@
 import './Welcome.css';
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Context from '../Context';
 
 const Welcome = () => {
-    const ctx = useContext(Context);
+    const ctx = useContext(Context); 
+
     return (
       <React.Fragment>
         <main>
@@ -25,12 +26,14 @@ const Welcome = () => {
           </section>
 
           <section>
-            <div id="loading-placeholder" className="">
+            <div id="loading-placeholder" className={ctx.data === undefined ? '' : 'inactive'}>
                 <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
                 <p><em>Un momento por favor <br/> Estamos Hackeando Banner</em> <span role="img" aria-label="Nice">😎</span></p>
             </div>
 
-            <button id="btn-start" className="inactive" type="button">Encuentra salones</button>
+            <a href="/buildings" className="avoid-underline">
+              <button id="btn-start" className={ctx.data === undefined ? 'inactive' : ''} type="button">Encuentra salones</button>
+            </a>
           </section>
         </main>
       </React.Fragment>

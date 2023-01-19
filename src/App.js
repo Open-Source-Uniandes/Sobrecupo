@@ -1,5 +1,5 @@
 import './App.css';
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Context from './Context';
 import Welcome from './Welcome/Welcome';
@@ -177,12 +177,150 @@ class Room
 
 }
 
+
+/* APP */
+
+// CONSTANTES
+const days = ['l', 'm', 'i', 'j', 'v', 's', 'd'];
+const retries = 3; // máximo de reintentos de llamar al API
+const cacheMins = 60; // minutos antes de volver a llamar al API 
+
+// FUNCIÓN DE INICIALIZACIÓN DE LOS SALONES
+const intialize = async () => {
+  const buildings = {};
+  let response = await fetch("https://ofertadecursos.uniandes.edu.co/api/courses?term=&ptrm=&prefix=&attr=&nameInput=&campus=CAMPUS%20PRINCIPAL&attrs=&timeStart=&offset=0&limit=10000")
+  response = await response.json();
+
+  //TODO revisar "CP", "K2", "ES"
+  let building_blacklist = ["0", "", " -", "VIRT", "NOREQ", "SALA", "LIGA", "LAB"];
+
+  let actual_date = new Date("2023-03-03");
+
+  for (let element of response ) {
+    for (let pattern of element.schedules) {
+
+      let date_ini = new Date(pattern.date_ini);
+      let date_fin = new Date(pattern.date_fin);
+
+      if (date_ini <= actual_date && date_fin >= actual_date) {
+
+        let classroom = pattern.classroom;
+        let building_name = (classroom.split("_")[0]).slice(1,);
+        let room_name = classroom.split("_")[1];
+
+        //Ignora los edificios que no se quieren mostrar
+        if (building_blacklist.includes(building_name)) {
+          continue
+        }
+        
+        if (buildings[building_name] == null) {
+          buildings[building_name] = new Building(building_name)
+        }
+
+        let room = new Room(room_name);
+        if (buildings[building_name].getRoom(room_name) == null) {
+          buildings[building_name].addRoom(room)
+        }
+
+        for (let day=0; day<=6; day++) {
+          if (pattern[days[day]] !== null) {
+            buildings[building_name].getRoom(room_name).addAvailability(day, [pattern.time_ini, pattern.time_fin]);
+          }
+        }
+
+        buildings[building_name].addRoom(room);
+      }
+    } 
+  }
+
+  console.log("All classes were loaded correctly");
+  console.log(buildings);
+
+  return buildings;
+  //TODO
+  // console.log(getAvailableRooms(1, "06:30"))
+  // console.log(getAvailableRooms(0, "12:30"))
+  // console.log(buildings["ADMI"].getRoom("11").isAvailable(0, "11:00"))
+}
+
+// TODO: Hacer cambio de 'this.' a variables locales, como en initialize
+// FUNCIÓN PARA OBTENER LA DISPONIBILIDAD DE LOS CURSOS
+const getAvailableRooms = (day, hour, building=undefined, floor=undefined) => 
+{
+  let available_rooms = []
+  for (let building_name in this.buildings)
+  {
+    //Revisa si el edificio es el correcto en caso dado que sea dado por parametro
+    if(building !== undefined && building_name !== building){continue}
+    
+    for (let room_name in this.buildings[building_name].rooms)
+    {
+      //Revisar si el piso es el correcto en caso dado que haya piso
+      if(floor !== undefined && room_name.slice(0,1) !== floor){continue}
+      const room = this.buildings[building_name].rooms[room_name]
+      let room_availability = room.isAvailable(day, hour)
+      room_availability["room"] = building_name+" "+room_availability["room"]
+      available_rooms.push(room_availability)
+    }
+  }
+  return available_rooms
+
+  //[{"ML001","5:30",1},{"ML002","4:30",2},{"ML002","5:30",3}]
+  //[{"ML001", "True", "5:30"}, {"ML002", False, "5:30", 10}]
+  // [[],[],[]]
+  //1:Disponible mas de x tiempo ->verde 
+  //2:Disponible menos de x tiempo ->naranja
+  //3:No disponible -> rojo
+
+}
+
+
 const App = () => {
-  const sobrecupo = new Sobrecupo();
+  const [data, setData] = useState(undefined);
+
+  useEffect(() => {
+    // 1.0 Revisa si las variables ya existen en almacenamiento
+    const lastUpdate = localStorage.getItem('last-update');
+    if (lastUpdate) {
+      const diffMins = (new Date() - new Date(lastUpdate))/ 60000; // ms a min, minutos desde la última actualización
+
+      if (diffMins < cacheMins) { // si la última actualización fue hace menos de 1h, tomar los últimos datos guardados del API
+        console.log('Cache hit, mins: ', diffMins);
+        const dt = localStorage.getItem('classrooms');
+        if (dt) {
+          setData(JSON.parse(dt));
+          return; // finalizar la función
+        }
+      }
+      console.log('Cache miss, mins: ', diffMins);
+    }
+
+    // 2.0 Define la función asíncrona que inicializa los salones
+    const _ = async () => {
+      const dt = await intialize();
+      setData(dt); // En este punto se quita el símbolo de carga de la pantalla principal
+      localStorage.setItem('classrooms', JSON.stringify(dt));
+      localStorage.setItem('last-update', new Date());
+    }
+
+    // 2.1 Si la inicialización falla, reintenta un número específico de veces
+    console.log('Fetching data from API...');
+    let i = 0;
+    while (i < retries) {
+      try {
+        _();
+        break;
+      } catch (error) {
+        console.log("There was an error and the courses were not loaded");
+        i++;
+      }
+    }
+  }, []);
+
   return (
     <div className="App">
       <Context.Provider 
-        value={sobrecupo}
+        value={{data}}
       >
         <Header/>
           <BrowserRouter>
