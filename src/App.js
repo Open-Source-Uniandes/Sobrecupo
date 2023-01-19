@@ -30,10 +30,12 @@ class Sobrecupo
   async initalize()
   {
     // const response = await fetch("https://ofertadecursos.uniandes.edu.co/api/courses?term=&ptrm=&prefix=&attr=&nameInput=&campus=CAMPUS%20PRINCIPAL&attrs=&timeStart=&offset=&limit=1")
-    const response = await fetch("https://ofertadecursos.uniandes.edu.co/api/courses?term=&ptrm=&prefix=&attr=&nameInput=&campus=CAMPUS%20PRINCIPAL&attrs=&timeStart=&offset=0&limit=1000")
+    const response = await fetch("https://ofertadecursos.uniandes.edu.co/api/courses?term=&ptrm=&prefix=&attr=&nameInput=&campus=CAMPUS%20PRINCIPAL&attrs=&timeStart=&offset=0&limit=10000")
     this.response = await response.json()
     this.loaded = true;
-    //TODO
+    //TODO revisar "CP", "K2", "ES"
+    let building_blacklist = ["0",""," -","VIRT","NOREQ", "SALA", "LIGA", "LAB"]
+
     let actual_date = new Date("2023-03-03")
     for (let element of this.response )
     {
@@ -48,6 +50,8 @@ class Sobrecupo
           let building_name = (classroom.split("_")[0]).slice(1,)
           let room_name = classroom.split("_")[1]
 
+          //Ignora los edificios que no se quieren mostrar
+          if (building_blacklist.includes(building_name)){continue}
 
           if (this.buildings[building_name] == null)
           {
@@ -73,7 +77,7 @@ class Sobrecupo
     console.log(this.buildings)
     //TODO
     // console.log(this.getAvailableRooms(1, "06:30"))
-    console.log(this.getAvailableRooms(0, "12:30","RGD","0"))
+    console.log(this.getAvailableRooms(0, "12:30"))
     //console.log(this.buildings["ADMI"].getRoom("11").isAvailable(0, "11:00"))
   }
 
