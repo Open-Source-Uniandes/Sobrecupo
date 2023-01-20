@@ -128,9 +128,6 @@ const intialize = async () => {
     } 
   }
 
-  console.log("All classes were loaded correctly");
-  console.log(buildings);
-
   return buildings;
   //TODO
   // console.log(getAvailableRooms(1, "06:30"))
@@ -138,35 +135,26 @@ const intialize = async () => {
   // console.log(buildings["ADMI"].getRoom("11").isAvailable(0, "11:00"))
 }
 
-// TODO: Hacer cambio de 'this.' a variables locales, como en initialize
-// FUNCIÓN PARA OBTENER LA DISPONIBILIDAD DE LOS CURSOS
-const getAvailableRooms = (day, hour, building=undefined, floor=undefined) => 
-{
-  let available_rooms = []
-  for (let building_name in this.buildings)
-  {
-    //Revisa si el edificio es el correcto en caso dado que sea dado por parametro
-    if(building !== undefined && building_name !== building){continue}
-    
-    for (let room_name in this.buildings[building_name].rooms)
-    {
-      //Revisar si el piso es el correcto en caso dado que haya piso
-      if(floor !== undefined && room_name.slice(0,1) !== floor){continue}
-      const room = this.buildings[building_name].rooms[room_name]
-      let room_availability = room.isAvailable(day, hour)
-      room_availability["room"] = building_name+" "+room_availability["room"]
-      available_rooms.push(room_availability)
+const plainToClasses = (json) => {
+  const buildings = {};
+  
+  for (const [bName, b] of Object.entries(json)) {
+    let building = new Building(bName);
+    for (const [rName, r] of Object.entries(b.rooms)) {
+      let room = new Room(rName);
+      let i = 0;
+      for (const dayAv of r.availability) {
+        for (const elAv of dayAv) {
+          room.addAvailability(i, elAv.map((e) => e.replace(':','')));
+        }
+        i++;
+      }
+      building.addRoom(room);
     }
+    buildings[bName] = building;
   }
-  return available_rooms
 
-  //[{"ML001","5:30",1},{"ML002","4:30",2},{"ML002","5:30",3}]
-  //[{"ML001", "True", "5:30"}, {"ML002", False, "5:30", 10}]
-  // [[],[],[]]
-  //1:Disponible mas de x tiempo ->verde 
-  //2:Disponible menos de x tiempo ->naranja
-  //3:No disponible -> rojo
-
+  return buildings;
 }
 
 const getRelativeUrlPath = () => {
@@ -176,6 +164,40 @@ const getRelativeUrlPath = () => {
 
 const App = () => {
   const [data, setData] = useState(undefined);
+
+  // FUNCIÓN PARA OBTENER LA DISPONIBILIDAD DE LOS CURSOS
+  const getAvailableRooms = (day, hour, building=undefined, floor=undefined) => {
+    console.log(day,hour);
+
+    let available_rooms = [];
+    for (let building_name in data) {
+      //Revisa si el edificio es el correcto en caso dado que sea dado por parametro
+      if(building !== undefined && building_name !== building){
+        continue;
+      }
+      
+      for (let room_name in data[building_name].rooms) {
+        //Revisar si el piso es el correcto en caso dado que haya piso
+        if (floor !== undefined && room_name.slice(0,1) !== floor) {
+          continue;
+        }
+        const room = data[building_name].rooms[room_name];
+        let room_availability = room.isAvailable(day, hour);
+        room_availability["room"] = building_name+" "+room_availability["room"];
+        available_rooms.push(room_availability);
+      }
+    }
+
+    //[{"ML001","5:30",1},{"ML002","4:30",2},{"ML002","5:30",3}]
+    //[{"ML001", "True", "5:30"}, {"ML002", False, "5:30", 10}]
+    // [[],[],[]]
+    //1:Disponible mas de x tiempo ->verde 
+    //2:Disponible menos de x tiempo ->naranja
+    //3:No disponible -> rojo
+
+    return available_rooms;
+  }
+
 
   useEffect(() => {
     // 1.0 Revisa si las variables ya existen en almacenamiento
@@ -188,7 +210,8 @@ const App = () => {
         console.log('Cache hit, mins: ', diffMins);
         const dt = localStorage.getItem('classrooms');
         if (dt) {
-          setData(JSON.parse(dt));
+          const js = JSON.parse(dt);
+          setData(plainToClasses(js));
           return; // finalizar la función
         }
       }
@@ -224,20 +247,41 @@ const App = () => {
   return (
     <div className="App">
       <Context.Provider 
-        value={{data}}
+        value={{
+          days,
+          data,
+          getAvailableRooms
+        }}
       >
-        <Header/>
+        {/* <Header/> va dento de cada uno*/}
           <BrowserRouter>
           <Routes>
             <Route path="/" element={<Welcome/>}/>
             <Route path="/buildings" element={<Buildings/>}/>
-            <Route path="/classrooms" element={<Classrooms/>}/>
+            <Route path="/classrooms/:building" element={<Classrooms/>}/>
+            <Route path="*" element={<PageNotFound/>}/>
           </Routes>
           </BrowserRouter>
         <Footer/>
       </Context.Provider>
     </div>
   );
+}
+
+const PageNotFound = () => {
+  return (
+    <>
+    <Header backhref='/'/>
+    <main>
+      <section>
+          <article className="information">
+              <h2>404</h2>
+              <p>No encontramos la página que buscas <span role="img" aria-label="Sad">🙁</span></p>
+          </article>
+      </section>
+    </main>
+    </>
+);
 }
 
 export default App;

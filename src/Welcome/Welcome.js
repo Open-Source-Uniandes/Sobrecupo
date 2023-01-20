@@ -1,12 +1,14 @@
 import './Welcome.css';
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import Context from '../Context';
+import Header from '../Header/Header';
 
 const Welcome = () => {
     const ctx = useContext(Context); 
 
     return (
       <React.Fragment>
+        <Header/>
         <main>
         <section>
             <article className="information">

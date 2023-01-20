@@ -47,6 +47,7 @@ main {
   height: 50px;
   font-size: 20px;
   text-align: center;
+  padding-left: 5px; /* agregué este padding */
 }
 
 .select-time #btn-update-time {

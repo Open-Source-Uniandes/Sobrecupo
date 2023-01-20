@@ -1,12 +1,16 @@
 import './Classrooms.css';
 import React, { useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import Context from '../Context';
+import Header from '../Header/Header';
 
 const Classrooms = () => {
     const ctx = useContext(Context);
+    const { building } = useParams();
 
     return (
       <React.Fragment>
+        <Header backhref='/buildings'/>
         <main>
             <section className="select-time">
                 <select name="select-day" id="select-day">
