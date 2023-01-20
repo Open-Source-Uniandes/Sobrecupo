@@ -8,109 +8,12 @@ import Footer from './Footer/Footer';
 import Buildings from './Buildings/Buildings';
 import Classrooms from './Classrooms/Classrooms';
 
-class Sobrecupo
-{
-  buildings = {}
-  response
-  loaded = false
-  days = ['l', 'm', 'i', 'j', 'v', 's', 'd']
-  constructor()
-  {
-    console.log("Extracting info from the api ")
-    try
-    {
-    this.initalize()
-    }
-    catch (error)
-    {
-      console.log("There was an error and the courses were not loaded")
-    }
-  }
+// CONSTANTES
+const days = ['l', 'm', 'i', 'j', 'v', 's', 'd'];
+const retries = 3; // máximo de reintentos de llamar al API
+const cacheMins = 60; // minutos antes de volver a llamar al API 
 
-  async initalize()
-  {
-    // const response = await fetch("https://ofertadecursos.uniandes.edu.co/api/courses?term=&ptrm=&prefix=&attr=&nameInput=&campus=CAMPUS%20PRINCIPAL&attrs=&timeStart=&offset=&limit=1")
-    const response = await fetch("https://ofertadecursos.uniandes.edu.co/api/courses?term=&ptrm=&prefix=&attr=&nameInput=&campus=CAMPUS%20PRINCIPAL&attrs=&timeStart=&offset=0&limit=10000")
-    this.response = await response.json()
-    this.loaded = true;
-    //TODO revisar "CP", "K2", "ES"
-    let building_blacklist = ["0",""," -","VIRT","NOREQ", "SALA", "LIGA", "LAB"]
-
-    let actual_date = new Date("2023-03-03")
-    for (let element of this.response )
-    {
-      for (let pattern of element.schedules)
-      {
-        let date_ini = new Date(pattern.date_ini)
-        let date_fin = new Date(pattern.date_fin)
-        if (date_ini <= actual_date && date_fin >= actual_date)
-        {
-
-          let classroom = pattern.classroom
-          let building_name = (classroom.split("_")[0]).slice(1,)
-          let room_name = classroom.split("_")[1]
-
-          //Ignora los edificios que no se quieren mostrar
-          if (building_blacklist.includes(building_name)){continue}
-
-          if (this.buildings[building_name] == null)
-          {
-            this.buildings[building_name] = new Building(building_name)
-          }
-          let room = new Room(room_name)
-          if (this.buildings[building_name].getRoom(room_name) == null)
-          {
-            this.buildings[building_name].addRoom(room)
-          }
-          for (let day=0; day<=6; day++)
-          {
-            if (pattern[this.days[day]] !== null)
-            {
-              this.buildings[building_name].getRoom(room_name).addAvailability(day, [pattern.time_ini, pattern.time_fin])
-            }
-          }
-          this.buildings[building_name].addRoom(room)
-        }
-      } 
-    }
-    console.log("All classes were loaded correctly")
-    console.log(this.buildings)
-    //TODO
-    // console.log(this.getAvailableRooms(1, "06:30"))
-    console.log(this.getAvailableRooms(0, "12:30"))
-    //console.log(this.buildings["ADMI"].getRoom("11").isAvailable(0, "11:00"))
-  }
-
-  getAvailableRooms(day, hour, building=undefined, floor=undefined)
-  {
-    let available_rooms = []
-    for (let building_name in this.buildings)
-    {
-      //Revisa si el edificio es el correcto en caso dado que sea dado por parametro
-      if(building !== undefined && building_name !== building){continue}
-      
-      for (let room_name in this.buildings[building_name].rooms)
-      {
-        //Revisar si el piso es el correcto en caso dado que haya piso
-        if(floor !== undefined && room_name.slice(0,1) !== floor){continue}
-        const room = this.buildings[building_name].rooms[room_name]
-        let room_availability = room.isAvailable(day, hour)
-        room_availability["room"] = building_name+" "+room_availability["room"]
-        available_rooms.push(room_availability)
-      }
-    }
-    return available_rooms
-
-    //[{"ML001","5:30",1},{"ML002","4:30",2},{"ML002","5:30",3}]
-    //[{"ML001", "True", "5:30"}, {"ML002", False, "5:30", 10}]
-    // [[],[],[]]
-    //1:Disponible mas de x tiempo ->verde 
-    //2:Disponible menos de x tiempo ->naranja
-    //3:No disponible -> rojo
-
-  }
-}
-
+// CLASES
 class Building
 {
   constructor(name)
@@ -176,14 +79,6 @@ class Room
   }
 
 }
-
-
-/* APP */
-
-// CONSTANTES
-const days = ['l', 'm', 'i', 'j', 'v', 's', 'd'];
-const retries = 3; // máximo de reintentos de llamar al API
-const cacheMins = 60; // minutos antes de volver a llamar al API 
 
 // FUNCIÓN DE INICIALIZACIÓN DE LOS SALONES
 const intialize = async () => {
@@ -274,6 +169,10 @@ const getAvailableRooms = (day, hour, building=undefined, floor=undefined) =>
 
 }
 
+const getRelativeUrlPath = () => {
+  const url = window.location.href;
+  return url.substring(url.split('/', 3).join('/').length);
+}
 
 const App = () => {
   const [data, setData] = useState(undefined);
@@ -281,8 +180,9 @@ const App = () => {
   useEffect(() => {
     // 1.0 Revisa si las variables ya existen en almacenamiento
     const lastUpdate = localStorage.getItem('last-update');
+    let diffMins;
     if (lastUpdate) {
-      const diffMins = (new Date() - new Date(lastUpdate))/ 60000; // ms a min, minutos desde la última actualización
+      diffMins = (new Date() - new Date(lastUpdate))/ 60000; // ms a min, minutos desde la última actualización
 
       if (diffMins < cacheMins) { // si la última actualización fue hace menos de 1h, tomar los últimos datos guardados del API
         console.log('Cache hit, mins: ', diffMins);
@@ -292,7 +192,11 @@ const App = () => {
           return; // finalizar la función
         }
       }
-      console.log('Cache miss, mins: ', diffMins);
+    }
+
+    console.log('Cache miss, mins: ', diffMins ? diffMins : 'first time!');
+    if (getRelativeUrlPath() !== '/') {
+      window.location.href = '/';
     }
 
     // 2.0 Define la función asíncrona que inicializa los salones
