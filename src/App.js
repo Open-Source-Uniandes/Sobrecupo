@@ -105,7 +105,7 @@ const intialize = async () => {
 
         //Ignora los edificios que no se quieren mostrar
         if (building_blacklist.includes(building_name)) {
-          continue
+          continue;
         }
         
         if (buildings[building_name] == null) {
@@ -167,8 +167,6 @@ const App = () => {
 
   // FUNCIÓN PARA OBTENER LA DISPONIBILIDAD DE LOS CURSOS
   const getAvailableRooms = (day, hour, building=undefined, floor=undefined) => {
-    console.log(day,hour);
-
     let available_rooms = [];
     for (let building_name in data) {
       //Revisa si el edificio es el correcto en caso dado que sea dado por parametro

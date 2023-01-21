@@ -23,15 +23,17 @@ const Buildings = () => {
         else d = day;
         if (t) setTime(t);
         else t = time;
-        
+
         const response = ctx.getAvailableRooms(ctx.days.indexOf(d.toLowerCase()),t);
 
         let bd = {}
         let all = 0;
         for (const room of response) {
-            const b = room.room.split(' ')[0];
-            bd[b] = bd[b] ? bd[b]+1 : 1;
-            all++;
+            if (room.available) {
+                const b = room.room.split(' ')[0];
+                bd[b] = bd[b] ? bd[b]+1 : 1;
+                all++;
+            }
         }
 
         bd = Object.keys(bd).sort().reduce(
@@ -54,6 +56,9 @@ const Buildings = () => {
         const d = ctx.days[today.getDay()-1].toUpperCase();
         const t = `${hour < 10 ? '0'+hour : hour}:${minute < 10 ? '0'+minute : minute}`;
 
+        //TODO: localStorage.removeItem('selected-day');
+        //TODO: localStorage.removeItem('selected-hour');
+
         updatePage(d, t);
     }
 
@@ -64,7 +69,10 @@ const Buildings = () => {
           <section className="select-time">
               <select name="select-day" id="select-day" 
                 value={day}
-                onChange={e => updatePage(e.target.value, null)}
+                onChange={e => {
+                    //TODO: localStorage.setItem('selected-day', e.target.value);
+                    updatePage(e.target.value, null);
+                }}
                 >
                   <option value="L">L</option>
                   <option value="M">M</option>
@@ -77,7 +85,10 @@ const Buildings = () => {
         
               <input type="time" name="select-hour" id="select-hour" 
                 value={time}
-                onChange={e => updatePage(null, e.target.value)}
+                onChange={e => {
+                    //TODO: localStorage.setItem('selected-hour', e.target.value);
+                    updatePage(null, e.target.value);
+                }}
                 />
         
               <button type="button" id="btn-update-time" onClick={now}>
@@ -88,7 +99,7 @@ const Buildings = () => {
           <section className="cards-container">
             {
                 Object.entries(buildings).map(([bName, available]) => 
-                <a className="avoid-underline" href={bName === 'TODOS' ? null : '/classrooms/'+bName} key={bName}>
+                <a className="avoid-underline" href={'/classrooms/'+bName} key={bName}>
                     <article className="building-card">
                         <h2>{bName}</h2>
                         <p><span>{available}</span> salones disponibles</p>
@@ -96,27 +107,6 @@ const Buildings = () => {
                 </a>
                 )
             }
-
-            {/*<article className="building-card">
-                    <h2>TODOS</h2>
-                    <p><span>60</span> salones disponibles</p>
-                </article>
-
-                <article className="building-card">
-                    <h2>AU</h2>
-                    <p><span>15</span> salones disponibles</p>
-                </article>
-
-                <article className="building-card">
-                    <h2>B</h2>
-                    <p><span>0</span> salones disponibles</p>
-                </article>
-
-                <article className="building-card">
-                    <h2>C</h2>
-                    <p><span>0</span> salones disponibles</p>
-            </article>*/}
-
           </section>
 
       </main>
