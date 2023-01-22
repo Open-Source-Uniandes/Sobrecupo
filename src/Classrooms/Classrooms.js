@@ -33,10 +33,12 @@ const Classrooms = () => {
     const now = () => {
         const today = new Date();
 
+        let day = today.getDay();
+        day = day ? day-1 : 6;
         const hour = today.getHours();
         const minute = today.getMinutes();
 
-        const d = ctx.days[today.getDay()-1].toUpperCase();
+        const d = ctx.days[day].toUpperCase();
         const t = `${hour < 10 ? '0'+hour : hour}:${minute < 10 ? '0'+minute : minute}`;
 
         updatePage(d, t);
