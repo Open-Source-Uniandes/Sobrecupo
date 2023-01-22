@@ -46,10 +46,19 @@ class Room
     }
   }
 
-  addAvailability(day, availability) 
-  {
-    let auxAvailability = [availability[0].slice(0, 2) + ":" + availability[0].slice(2) , availability[1].slice(0, 2) + ":" + availability[1].slice(2)]
-    this.availability[day].push(auxAvailability);
+  addAvailability(day, availability, timeIgnore) {
+    const [start, end] = availability.map(time => time.slice(0, 2) + ":" + time.slice(2));
+    for (let i = 0; i < this.availability[day].length; i++) {
+      const [existingStart, existingEnd] = this.availability[day][i];
+      if (differenceHours(existingStart, end) <= timeIgnore && differenceHours(existingStart, end) > 0) {
+        this.availability[day][i] = [start, existingEnd];
+        return;
+      } else if (differenceHours(start, existingEnd) <= timeIgnore && differenceHours(start, end) <= timeIgnore > 0) {
+        this.availability[day][i] = [existingStart, end];
+        return;
+      }
+    }
+    this.availability[day].push([start, end]);
   }
 
   isAvailable(day, hour){
@@ -119,7 +128,7 @@ const intialize = async () => {
 
         for (let day=0; day<=6; day++) {
           if (pattern[days[day]] !== null) {
-            buildings[building_name].getRoom(room_name).addAvailability(day, [pattern.time_ini, pattern.time_fin]);
+            buildings[building_name].getRoom(room_name).addAvailability(day, [pattern.time_ini, pattern.time_fin], 10);
           }
         }
 
@@ -145,7 +154,7 @@ const plainToClasses = (json) => {
       let i = 0;
       for (const dayAv of r.availability) {
         for (const elAv of dayAv) {
-          room.addAvailability(i, elAv.map((e) => e.replace(':','')));
+          room.addAvailability(i, elAv.map((e) => e.replace(':','')), 10);
         }
         i++;
       }
