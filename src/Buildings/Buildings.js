@@ -50,10 +50,14 @@ const Buildings = () => {
     const now = () => {
         const today = new Date();
 
+        let day = today.getDay();
+        day = day ? day-1 : 6;
         const hour = today.getHours();
         const minute = today.getMinutes();
 
-        const d = ctx.days[today.getDay()-1].toUpperCase();
+        console.log("today", day, "days", ctx.days);
+
+        const d = ctx.days[day].toUpperCase();
         const t = `${hour < 10 ? '0'+hour : hour}:${minute < 10 ? '0'+minute : minute}`;
 
         //TODO: localStorage.removeItem('selected-day');
