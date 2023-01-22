@@ -14,8 +14,8 @@ const Buildings = () => {
     });
 
     useEffect(() => {
-        const d = localStorage.getItem('selected-day');
-        const t = localStorage.getItem('selected-time');
+        const d = sessionStorage.getItem('selected-day');
+        const t = sessionStorage.getItem('selected-time');
 
         if (d && t) updatePage(d,t);
         else now();
@@ -29,8 +29,8 @@ const Buildings = () => {
         else t = time;
 
         if (set) {
-            localStorage.setItem('selected-day', d);
-            localStorage.setItem('selected-time', t);
+            sessionStorage.setItem('selected-day', d);
+            sessionStorage.setItem('selected-time', t);
         }
 
         const response = ctx.getAvailableRooms(ctx.days.indexOf(d.toLowerCase()),t);
@@ -66,8 +66,8 @@ const Buildings = () => {
         const d = ctx.days[day].toUpperCase();
         const t = `${hour < 10 ? '0'+hour : hour}:${minute < 10 ? '0'+minute : minute}`;
 
-        localStorage.removeItem('selected-day');
-        localStorage.removeItem('selected-time');
+        sessionStorage.removeItem('selected-day');
+        sessionStorage.removeItem('selected-time');
 
         updatePage(d, t);
     }
