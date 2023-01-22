@@ -11,7 +11,15 @@ const Classrooms = () => {
     const [day, setDay] = useState('L');
     const [time, setTime] = useState('--:--');
 
-    const [classrooms, setClassrooms] = useState([]);
+    const [classrooms, setClassrooms] = useState({
+        true:[],
+        false:[]
+    });
+
+    const storedSorted = localStorage.getItem('sorted-classrooms');
+    const [sorted, setSorted] = useState(
+        storedSorted ? storedSorted==='true' : true
+    );
 
     useEffect(() => {
         const d = localStorage.getItem('selected-day');
@@ -36,7 +44,15 @@ const Classrooms = () => {
         const response = ctx.getAvailableRooms(ctx.days.indexOf(d.toLowerCase()),t, building === 'TODOS' ? undefined : building);
         console.log(response);
 
-        setClassrooms(response);
+        const sortedResp = response.slice();
+        sortedResp.sort((a, b) => {
+            if (a.available === b.available) {
+              return a.room < b.room ? -1 : a.room > b.room ? 1 : 0;
+            }
+            return a.available ? -1 : 1;
+          });
+
+        setClassrooms({true:sortedResp, false:response});
     }
 
     const now = () => {
@@ -84,9 +100,25 @@ const Classrooms = () => {
                 </button>
             </section>
 
+            <section className="switch-box">
+                <label className="switch">
+                    <input type="checkbox" name="order"
+                      checked={sorted}
+                      onChange={e => {
+                        setSorted(!sorted);
+                        localStorage.setItem('sorted-classrooms', !sorted);
+                      }}
+                      />
+                    <span className="slider round"></span>
+                </label>
+                <label className="switch-text">
+                    Ordenar por desocupados
+                </label>
+            </section>
+
             <section className="cards-container">
                 {
-                    classrooms.map((room) => 
+                    classrooms[sorted].map((room) => 
                     <article className={"classroom-card " + (room.available ? 'available' : '')} key={room.room}>
                         <h2>{room.room}</h2>
                         <p>Me {room.available ? 'ocupo' : 'desocupo'} a las <span>{room.time}</span></p>
