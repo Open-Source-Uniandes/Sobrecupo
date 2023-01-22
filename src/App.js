@@ -46,12 +46,29 @@ class Room
     }
   }
 
-  addAvailability(day, availability) 
+  addAvailability(day, availability, timeIgnore) 
   {
     let auxAvailability = [availability[0].slice(0, 2) + ":" + availability[0].slice(2) , availability[1].slice(0, 2) + ":" + availability[1].slice(2)]
+    let i = 0
+    while(i < this.availability[day].length){
+      let todayAvailability = this.availability[day][i]
+      if(this.differenceHours(todayAvailability[0], auxAvailability[1])<=timeIgnore && this.differenceHours(todayAvailability[0], auxAvailability[1])>0){
+        let newAvailability = [...todayAvailability]
+        newAvailability[0] = auxAvailability[0]
+        this.availability[day].splice(i, 1)
+        this.addAvailability(day, newAvailability.map(item =>item.replace(':', '') ), timeIgnore)
+        return;
+      }else if(this.differenceHours(auxAvailability[0], todayAvailability[1])<=timeIgnore && this.differenceHours(todayAvailability[0], auxAvailability[1])<=timeIgnore>0){
+        let newAvailability = [...todayAvailability]
+        newAvailability[1] = auxAvailability[1]
+        this.availability[day].splice(i, 1)
+        this.addAvailability(day, newAvailability.map(item =>item.replace(':', '') ), timeIgnore)
+        return;
+      }
+    i++
+    }
     this.availability[day].push(auxAvailability);
   }
-
   isAvailable(day, hour){
     let todayAvailability = this.availability[day]
     let isBusy = false
@@ -119,7 +136,7 @@ const intialize = async () => {
 
         for (let day=0; day<=6; day++) {
           if (pattern[days[day]] !== null) {
-            buildings[building_name].getRoom(room_name).addAvailability(day, [pattern.time_ini, pattern.time_fin]);
+            buildings[building_name].getRoom(room_name).addAvailability(day, [pattern.time_ini, pattern.time_fin], 10);
           }
         }
 
@@ -145,7 +162,7 @@ const plainToClasses = (json) => {
       let i = 0;
       for (const dayAv of r.availability) {
         for (const elAv of dayAv) {
-          room.addAvailability(i, elAv.map((e) => e.replace(':','')));
+          room.addAvailability(i, elAv.map((e) => e.replace(':','')), 10);
         }
         i++;
       }
@@ -153,7 +170,7 @@ const plainToClasses = (json) => {
     }
     buildings[bName] = building;
   }
-
+  console.log(buildings)
   return buildings;
 }
 
