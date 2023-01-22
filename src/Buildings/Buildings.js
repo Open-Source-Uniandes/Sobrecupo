@@ -40,8 +40,7 @@ const Buildings = () => {
           (obj, key) => { 
             obj[key] = bd[key]; 
             return obj;
-          }, 
-          {}
+          }, {}
         );
 
         setBuildings({'TODOS':all, ...bd});
@@ -54,8 +53,6 @@ const Buildings = () => {
         day = day ? day-1 : 6;
         const hour = today.getHours();
         const minute = today.getMinutes();
-
-        console.log("today", day, "days", ctx.days);
 
         const d = ctx.days[day].toUpperCase();
         const t = `${hour < 10 ? '0'+hour : hour}:${minute < 10 ? '0'+minute : minute}`;
