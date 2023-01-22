@@ -14,15 +14,24 @@ const Classrooms = () => {
     const [classrooms, setClassrooms] = useState([]);
 
     useEffect(() => {
-        now();
+        const d = localStorage.getItem('selected-day');
+        const t = localStorage.getItem('selected-time');
+
+        if (d && t) updatePage(d,t);
+        else now();
         // eslint-disable-next-line
     }, [ctx.data]);
 
-    const updatePage = async (d,t) => {
+    const updatePage = async (d,t, set=false) => {
         if (d) setDay(d);
         else d = day;
         if (t) setTime(t);
         else t = time;
+
+        if (set) {
+            localStorage.setItem('selected-day', d);
+            localStorage.setItem('selected-time', t);
+        }
 
         const response = ctx.getAvailableRooms(ctx.days.indexOf(d.toLowerCase()),t, building === 'TODOS' ? undefined : building);
         console.log(response);
@@ -41,6 +50,9 @@ const Classrooms = () => {
         const d = ctx.days[day].toUpperCase();
         const t = `${hour < 10 ? '0'+hour : hour}:${minute < 10 ? '0'+minute : minute}`;
 
+        localStorage.removeItem('selected-day');
+        localStorage.removeItem('selected-time');
+
         updatePage(d, t);
     }
 
@@ -51,7 +63,7 @@ const Classrooms = () => {
             <section className="select-time">
                 <select name="select-day" id="select-day"
                   value={day}
-                  onChange={e => updatePage(e.target.value, null)}
+                  onChange={e => updatePage(e.target.value, null, true)}
                   >
                     <option value="L">L</option>
                     <option value="M">M</option>
@@ -64,7 +76,7 @@ const Classrooms = () => {
 
                 <input type="time" name="select-hour" id="select-hour"
                   value={time}
-                  onChange={e => updatePage(null, e.target.value)}
+                  onChange={e => updatePage(null, e.target.value, true)}
                   />
                 
                 <button type="button" id="btn-update-time" onClick={now}>

@@ -237,6 +237,9 @@ const App = () => {
       window.location.href = '/';
     }
 
+    localStorage.removeItem('selected-day');
+    localStorage.removeItem('selected-time');
+
     // 2.0 Define la función asíncrona que inicializa los salones
     const _ = async () => {
       const dt = await intialize();
