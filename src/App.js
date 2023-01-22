@@ -46,21 +46,29 @@ class Room
     }
   }
 
-  addAvailability(day, availability, timeIgnore) {
-    const [start, end] = availability.map(time => time.slice(0, 2) + ":" + time.slice(2));
-    for (let i = 0; i < this.availability[day].length; i++) {
-      const [existingStart, existingEnd] = this.availability[day][i];
-      if (differenceHours(existingStart, end) <= timeIgnore && differenceHours(existingStart, end) > 0) {
-        this.availability[day][i] = [start, existingEnd];
+  addAvailability(day, availability, timeIgnore) 
+  {
+    let auxAvailability = [availability[0].slice(0, 2) + ":" + availability[0].slice(2) , availability[1].slice(0, 2) + ":" + availability[1].slice(2)]
+    let i = 0
+    while(i < this.availability[day].length){
+      let todayAvailability = this.availability[day][i]
+      if(this.differenceHours(todayAvailability[0], auxAvailability[1])<=timeIgnore && this.differenceHours(todayAvailability[0], auxAvailability[1])>0){
+        let newAvailability = [...todayAvailability]
+        newAvailability[0] = auxAvailability[0]
+        this.availability[day].splice(i, 1)
+        this.addAvailability(day, newAvailability.map(item =>item.replace(':', '') ), timeIgnore)
         return;
-      } else if (differenceHours(start, existingEnd) <= timeIgnore && differenceHours(start, end) <= timeIgnore > 0) {
-        this.availability[day][i] = [existingStart, end];
+      }else if(this.differenceHours(auxAvailability[0], todayAvailability[1])<=timeIgnore && this.differenceHours(todayAvailability[0], auxAvailability[1])<=timeIgnore>0){
+        let newAvailability = [...todayAvailability]
+        newAvailability[1] = auxAvailability[1]
+        this.availability[day].splice(i, 1)
+        this.addAvailability(day, newAvailability.map(item =>item.replace(':', '') ), timeIgnore)
         return;
       }
+    i++
     }
-    this.availability[day].push([start, end]);
+    this.availability[day].push(auxAvailability);
   }
-
   isAvailable(day, hour){
     let todayAvailability = this.availability[day]
     let isBusy = false
@@ -162,7 +170,7 @@ const plainToClasses = (json) => {
     }
     buildings[bName] = building;
   }
-
+  console.log(buildings)
   return buildings;
 }
 
