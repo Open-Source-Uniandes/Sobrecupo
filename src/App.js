@@ -146,10 +146,6 @@ const intialize = async () => {
   }
 
   return buildings;
-  //TODO
-  // console.log(getAvailableRooms(1, "06:30"))
-  // console.log(getAvailableRooms(0, "12:30"))
-  // console.log(buildings["ADMI"].getRoom("11").isAvailable(0, "11:00"))
 }
 
 const plainToClasses = (json) => {
@@ -170,7 +166,6 @@ const plainToClasses = (json) => {
     }
     buildings[bName] = building;
   }
-  console.log(buildings)
   return buildings;
 }
 
@@ -212,7 +207,6 @@ const App = () => {
 
     return available_rooms;
   }
-
 
   useEffect(() => {
     // 1.0 Revisa si las variables ya existen en almacenamiento
@@ -299,7 +293,7 @@ const PageNotFound = () => {
       </section>
     </main>
     </>
-);
+  );
 }
 
 export default App;

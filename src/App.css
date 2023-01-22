@@ -2,9 +2,11 @@
   --light-gray: #dadce0;
   --dark-gray: #494951;
   --yellow: #fff353;
-  --strong-yellow: #f6c551;
-  --pastel-red: #ff6961;
-  --pastel-green: #ceffc9;
+  --strong-yellow: #f6c551; 
+  --pastel-red: #ff6961; /* lvl 0 */
+  --pastel-orange: #ff9688; /* lvl 1 */
+  --pastel-yellow: #f5fac1; /* lvl 2 */
+  --pastel-green: #ceffc9; /* lvl 3 */
 } 
 
 * {
