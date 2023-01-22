@@ -6,25 +6,38 @@ import Header from '../Header/Header';
 const Welcome = () => {
     const ctx = useContext(Context); 
 
+    sessionStorage.removeItem('selected-day');
+    sessionStorage.removeItem('selected-time');
+
     return (
       <React.Fragment>
         <Header/>
         <main>
         <section>
             <article className="information">
-                <h2>Lorem ipsum dolor sit amet.</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet id eius voluptatum eum atque voluptas doloremque, numquam reiciendis laudantium ipsa cupiditate architecto quaerat dicta necessitatibus repellat sint temporibus dolor delectus velit soluta adipisci! Necessitatibus consequatur dicta atque</p>        
+                <h2>¿Buscando salón?</h2>
+                <p>Sabemos que muchas veces estás en la universidad y quieres o necesitas conseguir un salón libre, y puede ser muy difícil encontrarlo o si quiera saber si hay alguno. <br/><br/> Sobrecupo es una plataforma web que te permite visualizar los salones que se encuentran disponibles en un momento específico de la semana, como por ejemplo... <b>¡Justo ahora!</b></p>
             </article>
 
             <article className="information">
-                <h2>Lorem ipsum dolor sit amet.</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet id eius voluptatum eum atque voluptas doloremque, numquam reiciendis laudantium ipsa cupiditate architecto quaerat dicta necessitatibus repellat sint temporibus dolor delectus velit soluta adipisci! Necessitatibus consequatur dicta atque</p>        
+                <h2>Open Source</h2>
+                <p>Este es un proyecto de la comunidad Uniandina para la comunidad Uniandina. El código que hace posible esta herramienta es tuyo. Anímate a proponer nuevas funcionalidades, cambios de diseño, optimizaciones, o lo que tú quieras. ¡Tu aporte impactará toda la comunidad Uniandina!</p>
             </article>
 
             <article className="information">
-                <h2>Lorem ipsum dolor sit amet.</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet id eius voluptatum eum atque voluptas doloremque, numquam reiciendis laudantium ipsa cupiditate architecto quaerat dicta necessitatibus repellat sint temporibus dolor delectus velit soluta adipisci! Necessitatibus consequatur dicta atque</p>        
+                <h2>¡Comienza! <span role="img" aria-label="Boom">💥</span></h2>
+                <p>Para mantener la información actualizada, cuando pase una hora, serás redirigido a esta página para volver a cargar los datos. No te preocupes, es bastante rápido.</p>
             </article>
+
+            <article className="information">
+                <h2>Fácil de manejar</h2>
+                <ol>
+                  <li>Selecciona el día de la semana y la hora a la que desées buscar (<b style={{'fontFamily':'consolas'}}>I</b> quiere decir miércoles) o da click en <b>Ahora</b> para seleccionar la hora actual; esta se seleccionará por defecto si no has escogido una hora.</li>
+                  <br/>
+                  <li>¡Listo! Ya puedes ver la disponibilidad de cada edificio y salón; también puedes filtrar para ver solo los salones libres.</li>
+                </ol>
+            </article>
+
           </section>
 
           <section>

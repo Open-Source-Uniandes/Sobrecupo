@@ -3,6 +3,12 @@
     text-align: justify;
 }
 
+.information ol {
+    margin: 10px 0;
+    margin-left: 20px;
+    text-align: justify;
+}
+
 #loading-placeholder {
     display: flex;
     flex-direction: column;

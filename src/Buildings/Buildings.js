@@ -107,7 +107,7 @@ const Buildings = () => {
                 <a className="avoid-underline" href={'/classrooms/'+bName} key={bName}>
                     <article className={`building-card available-lvl${available ? Math.min(3,Math.ceil((available+1)/10)) : 0}`} >
                         <h2>{bName}</h2>
-                        <p><span>{available}</span> salones disponibles</p>
+                        <p><span>{available}</span> {available === 1 ? 'salón disponible' : 'salones disponibles'}</p>
                     </article>
                 </a>
                 )})
