@@ -1,5 +1,6 @@
 import './Welcome.css';
 import React, { useContext } from 'react';
+import { Link } from "react-router-dom";
 import Context from '../Context';
 import Header from '../Header/Header';
 
@@ -46,9 +47,9 @@ const Welcome = () => {
                 <p><em>Un momento por favor <br/> Estamos Hackeando Banner</em> <span role="img" aria-label="Nice">😎</span></p>
             </div>
 
-            <a href="/buildings" className="avoid-underline">
+            <Link to="/buildings" className="avoid-underline">
               <button id="btn-start" className={ctx.data === undefined ? 'inactive' : ''} type="button">Encuentra salones</button>
-            </a>
+            </Link>
           </section>
         </main>
       </React.Fragment>

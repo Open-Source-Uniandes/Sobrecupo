@@ -1,5 +1,6 @@
 import './Buildings.css';
 import React, { useContext, useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import Context from '../Context';
 import Header from '../Header/Header';
 
@@ -104,12 +105,12 @@ const Buildings = () => {
             {
                 Object.entries(buildings).map(([bName, available]) => {
                 return (
-                <a className="avoid-underline" href={'/classrooms/'+bName} key={bName}>
+                <Link className="avoid-underline" to={'/classrooms/'+bName} key={bName}>
                     <article className={`building-card available-lvl${available ? Math.min(3,Math.ceil((available+1)/10)) : 0}`} >
                         <h2>{bName}</h2>
                         <p><span>{available}</span> {available === 1 ? 'salón disponible' : 'salones disponibles'}</p>
                     </article>
-                </a>
+                </Link>
                 )})
             }
           </section>
