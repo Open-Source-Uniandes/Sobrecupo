@@ -227,9 +227,9 @@ const App = () => {
     }
 
     console.log('Cache miss, mins: ', diffMins ? diffMins : 'first time!');
-    if (getRelativeUrlPath() !== '/') {
-      window.location.href = '/';
-    }
+    // if (getRelativeUrlPath() !== '/') {
+    //   window.location.href = '/';
+    // }
 
     // 2.0 Define la función asíncrona que inicializa los salones
     const _ = async () => {
@@ -263,7 +263,7 @@ const App = () => {
         }}
       >
         {/* <Header/> va dento de cada uno*/}
-          <BrowserRouter>
+          <BrowserRouter basename="/Sobrecupo">
           <Routes>
             <Route path="/" element={<Welcome/>}/>
             <Route path="/buildings" element={<Buildings/>}/>
