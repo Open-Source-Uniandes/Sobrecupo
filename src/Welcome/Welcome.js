@@ -16,7 +16,7 @@ const Welcome = () => {
         <section>
             <article className="information">
                 <h2>¿Buscando salón?</h2>
-                <p>Sabemos que muchas veces estás en la universidad y quieres o necesitas conseguir un salón libre, y puede ser muy difícil encontrarlo o si quiera saber si hay alguno. <br/><br/> Sobrecupo es una plataforma web que te permite visualizar los salones que se encuentran disponibles en un momento específico de la semana, como por ejemplo... <b>¡Justo ahora!</b></p>
+                <p>Sabemos que muchas veces estás en la universidad y quieres o necesitas conseguir un salón libre, y puede ser muy difícil encontrarlo o siquiera saber si hay alguno. <br/><br/> Sobrecupo es una plataforma web que te permite visualizar los salones que se encuentran disponibles en un momento específico de la semana, como por ejemplo... <b>¡Justo ahora!</b></p>
             </article>
 
             <article className="information">
@@ -26,7 +26,7 @@ const Welcome = () => {
 
             <article className="information">
                 <h2>¡Comienza! <span role="img" aria-label="Boom">💥</span></h2>
-                <p>Para mantener la información actualizada, cuando pase una hora, serás redirigido a esta página para volver a cargar los datos. No te preocupes, es bastante rápido.</p>
+                <p>Para mantener la información actualizada, cada día serás redirigido a esta página para volver a cargar los datos. No te preocupes, es bastante rápido.</p>
             </article>
 
             <article className="information">

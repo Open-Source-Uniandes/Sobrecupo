@@ -11,7 +11,7 @@ import Classrooms from './Classrooms/Classrooms';
 // CONSTANTES
 const days = ['l', 'm', 'i', 'j', 'v', 's', 'd'];
 const retries = 3; // máximo de reintentos de llamar al API
-const cacheMins = 60; // minutos antes de volver a llamar al API 
+const cacheMins = 1440; // minutos antes de volver a llamar al API 
 
 // CLASES
 class Building
