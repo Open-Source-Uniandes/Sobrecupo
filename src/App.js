@@ -7,6 +7,8 @@ import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import Buildings from './Buildings/Buildings';
 import Classrooms from './Classrooms/Classrooms';
+import courseFile from './Data/courses.json'
+
 
 // CONSTANTES
 const days = ['l', 'm', 'i', 'j', 'v', 's', 'd'];
@@ -98,11 +100,9 @@ class Room
 }
 
 // FUNCIÓN DE INICIALIZACIÓN DE LOS SALONES
-const intialize = async () => {
+const initialize = async (roomsJson) => {
   const buildings = {};
-  let response = await fetch("https://ofertadecursos.uniandes.edu.co/api/courses?term=&ptrm=&prefix=&attr=&nameInput=&campus=CAMPUS%20PRINCIPAL&attrs=&timeStart=&offset=0&limit=10000")
-  response = await response.json();
-
+  let response = roomsJson;
   //TODO revisar "CP", "K2", "ES"
   let building_blacklist = ["0", "", " -", "VIRT", "NOREQ", "SALA", "LIGA", "LAB"];
 
@@ -148,32 +148,6 @@ const intialize = async () => {
   return buildings;
 }
 
-const plainToClasses = (json) => {
-  const buildings = {};
-  
-  for (const [bName, b] of Object.entries(json)) {
-    let building = new Building(bName);
-    for (const [rName, r] of Object.entries(b.rooms)) {
-      let room = new Room(rName);
-      let i = 0;
-      for (const dayAv of r.availability) {
-        for (const elAv of dayAv) {
-          room.addAvailability(i, elAv.map((e) => e.replace(':','')), 10);
-        }
-        i++;
-      }
-      building.addRoom(room);
-    }
-    buildings[bName] = building;
-  }
-  return buildings;
-}
-
-const getRelativeUrlPath = () => {
-  const url = window.location.href;
-  return url.substring(url.split('/', 3).join('/').length);
-}
-
 const App = () => {
   const [data, setData] = useState(undefined);
 
@@ -197,60 +171,18 @@ const App = () => {
         available_rooms.push(room_availability);
       }
     }
-
-    //[{"ML001","5:30",1},{"ML002","4:30",2},{"ML002","5:30",3}]
-    //[{"ML001", "True", "5:30"}, {"ML002", False, "5:30", 10}]
-    // [[],[],[]]
-    //1:Disponible mas de x tiempo ->verde 
-    //2:Disponible menos de x tiempo ->naranja
-    //3:No disponible -> rojo
-
     return available_rooms;
   }
 
   useEffect(() => {
-    // 1.0 Revisa si las variables ya existen en almacenamiento
-    const lastUpdate = localStorage.getItem('last-update');
-    let diffMins;
-    if (lastUpdate) {
-      diffMins = (new Date() - new Date(lastUpdate))/ 60000; // ms a min, minutos desde la última actualización
 
-      if (diffMins < cacheMins) { // si la última actualización fue hace menos de 1h, tomar los últimos datos guardados del API
-        console.log('Cache hit, mins: ', diffMins);
-        const dt = localStorage.getItem('classrooms');
-        if (dt) {
-          const js = JSON.parse(dt);
-          setData(plainToClasses(js));
-          return; // finalizar la función
-        }
-      }
-    }
-
-    console.log('Cache miss, mins: ', diffMins ? diffMins : 'first time!');
-    // if (getRelativeUrlPath() !== '/') {
-    //   window.location.href = '/';
-    // }
-
-    // 2.0 Define la función asíncrona que inicializa los salones
-    const _ = async () => {
-      const dt = await intialize();
+    // 1.0 Carga la informacion de los salones desde el archivo JSON
+    const loadData = async () => {
+      const dt = await initialize(courseFile);  
       setData(dt); // En este punto se quita el símbolo de carga de la pantalla principal
-      localStorage.setItem('classrooms', JSON.stringify(dt));
-      localStorage.setItem('last-update', new Date());
+      return;
     }
-
-    // 2.1 Si la inicialización falla, reintenta un número específico de veces
-    console.log('Fetching data from API...');
-    let i = 0;
-    while (i < retries) {
-      try {
-        _();
-        break;
-      } catch (error) {
-        console.log("There was an error and the courses were not loaded");
-        i++;
-      }
-    }
+    loadData();
   }, []);
 
   return (
