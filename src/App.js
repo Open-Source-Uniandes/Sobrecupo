@@ -10,6 +10,8 @@ import Classrooms from './Classrooms/Classrooms';
 import courseFile from './Data/courses.json'
 
 
+//https://ofertadecursos.uniandes.edu.co/api/courses?term=&ptrm=&prefix=&attr=&nameInput=&campus=CAMPUS%20PRINCIPAL&attrs=&timeStart=&offset=0&limit=10000
+
 // CONSTANTES
 const days = ['l', 'm', 'i', 'j', 'v', 's', 'd'];
 const retries = 3; // máximo de reintentos de llamar al API
