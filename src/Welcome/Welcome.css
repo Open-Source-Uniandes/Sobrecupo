@@ -32,6 +32,16 @@
     cursor: pointer;
 }
 
+#btn-start:active {
+    -webkit-transform: scale(0.95);
+    -ms-transform: scale(0.95);
+    transform: scale(0.95);
+    
+    -webkit-transition-duration: 100ms;
+    -o-transition-duration: 100ms;
+    transition-duration: 100ms;
+}
+
 .inactive {
     display: none !important;
 }
