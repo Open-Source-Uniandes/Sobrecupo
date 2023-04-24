@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Sobrecupo/static/css/main.d2e65155.css",
-    "main.js": "/Sobrecupo/static/js/main.5b69d408.js",
+    "main.css": "/Sobrecupo/static/css/main.28701b59.css",
+    "main.js": "/Sobrecupo/static/js/main.fca1f265.js",
     "index.html": "/Sobrecupo/index.html",
-    "main.d2e65155.css.map": "/Sobrecupo/static/css/main.d2e65155.css.map",
-    "main.5b69d408.js.map": "/Sobrecupo/static/js/main.5b69d408.js.map"
+    "main.28701b59.css.map": "/Sobrecupo/static/css/main.28701b59.css.map",
+    "main.fca1f265.js.map": "/Sobrecupo/static/js/main.fca1f265.js.map"
   },
   "entrypoints": [
-    "static/css/main.d2e65155.css",
-    "static/js/main.5b69d408.js"
+    "static/css/main.28701b59.css",
+    "static/js/main.fca1f265.js"
   ]
 }
