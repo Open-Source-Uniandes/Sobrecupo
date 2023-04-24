@@ -9,7 +9,7 @@
   --pastel-green: #ceffc9; /* lvl 3 */
 } 
 
-* {
+.App * {
 
   /* Reset box model */
   margin: 0;
@@ -21,7 +21,11 @@
   color: var(--dark-gray);
 }
 
-main {
+.floating-mailbox {
+  text-align: center;
+}
+
+.App main {
   margin: 20px 30px;
 }
 

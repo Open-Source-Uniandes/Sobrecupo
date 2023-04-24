@@ -7,7 +7,8 @@ import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import Buildings from './Buildings/Buildings';
 import Classrooms from './Classrooms/Classrooms';
-import courseFile from './Data/courses.json'
+import courseFile from './Data/courses.json';
+import FloatingMailbox from 'react-floating-mailbox';
 
 
 //https://ofertadecursos.uniandes.edu.co/api/courses?term=&ptrm=&prefix=&attr=&nameInput=&campus=CAMPUS%20PRINCIPAL&attrs=&timeStart=&offset=0&limit=10000
@@ -188,26 +189,36 @@ const App = () => {
   }, []);
 
   return (
-    <div className="App">
-      <Context.Provider 
-        value={{
-          days,
-          data,
-          getAvailableRooms
-        }}
-      >
-        {/* <Header/> va dento de cada uno*/}
-          <BrowserRouter basename="/Sobrecupo">
-          <Routes>
-            <Route path="/" element={<Welcome/>}/>
-            <Route path="/buildings" element={<Buildings/>}/>
-            <Route path="/classrooms/:building" element={<Classrooms/>}/>
-            <Route path="*" element={<PageNotFound/>}/>
-          </Routes>
-          </BrowserRouter>
-        <Footer/>
-      </Context.Provider>
-    </div>
+    <>
+      <div className="App">
+        <Context.Provider 
+          value={{
+            days,
+            data,
+            getAvailableRooms
+          }}
+        >
+          {/* <Header/> va dento de cada uno*/}
+            <BrowserRouter basename="/Sobrecupo">
+            <Routes>
+              <Route path="/" element={<Welcome/>}/>
+              <Route path="/buildings" element={<Buildings/>}/>
+              <Route path="/classrooms/:building" element={<Classrooms/>}/>
+              <Route path="*" element={<PageNotFound/>}/>
+            </Routes>
+            </BrowserRouter>
+          <Footer/>
+        </Context.Provider>
+      </div>
+      <FloatingMailbox
+        to="TODO@gmail.com"
+        subject="Sobrecupo"
+        header="¡Cuéntanos tu experiencia, o escríbenos alguna nueva idea que tengas para implementar!"
+        serviceId="TODO: Cambiar serviceId"
+        templateId="TODO: Cambiar templateId"
+        userId="TODO: Cambiar userId"
+      />
+    </>
   );
 }
 
