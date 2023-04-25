@@ -44,7 +44,7 @@ const Welcome = () => {
           <section>
             <div id="loading-placeholder" className={ctx.data === undefined ? '' : 'inactive'}>
                 <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
-                <p><em>Un momento por favor <br/> Estamos Hackeando Banner</em> <span role="img" aria-label="Nice">😎</span></p>
+                <p><em>Un momento por favor <br/> Estamos consultando Banner</em> <span role="img" aria-label="Nice">😎</span></p>
             </div>
 
             <Link to="/buildings" className="avoid-underline">
