@@ -1,8 +1,8 @@
-# Sobrecupo
+# AulaFinder
 
 ¡Bienvenido!
 
-Sobrecupo es una aplicación web que se nutre de la API de cursos de la Universidad de los Andes para ayudarte a encontrar salones libres en la universidad.
+AulaFinder es una aplicación web que se nutre de la API de cursos de la Universidad de los Andes para ayudarte a encontrar salones libres en la universidad.
 
 Visita la aplicación web desplegada [aquí](https://open-source-uniandes.github.io/Sobrecupo/)
 
