@@ -212,11 +212,12 @@ const App = () => {
       </div>
       <FloatingMailbox
         to="TODO@gmail.com"
-        subject="Sobrecupo"
+        subject="AulaFinder"
         header="¡Cuéntanos tu experiencia, o escríbenos alguna nueva idea que tengas para implementar!"
         serviceId="TODO: Cambiar serviceId"
         templateId="TODO: Cambiar templateId"
         userId="TODO: Cambiar userId"
+        lang="es"
       />
     </>
   );

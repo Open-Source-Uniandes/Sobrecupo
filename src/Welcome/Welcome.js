@@ -17,7 +17,7 @@ const Welcome = () => {
         <section>
             <article className="information">
                 <h2>¿Buscando salón?</h2>
-                <p>Sabemos que muchas veces estás en la universidad y quieres o necesitas conseguir un salón libre, y puede ser muy difícil encontrarlo o siquiera saber si hay alguno. <br/><br/> Sobrecupo es una plataforma web que te permite visualizar los salones que se encuentran disponibles en un momento específico de la semana, como por ejemplo... <b>¡Justo ahora!</b></p>
+                <p>Sabemos que muchas veces estás en la universidad y quieres o necesitas conseguir un salón libre, y puede ser muy difícil encontrarlo o siquiera saber si hay alguno. <br/><br/> AulaFinder es una plataforma web que te permite visualizar los salones que se encuentran disponibles en un momento específico de la semana, como por ejemplo... <b>¡Justo ahora!</b></p>
             </article>
 
             <article className="information">

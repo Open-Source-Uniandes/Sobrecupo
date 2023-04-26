@@ -6,7 +6,7 @@ const Header = ({ backhref }) => {
     return (
       <React.Fragment>
         <header>
-          <h1>Sobrecupo</h1>
+          <h1>AulaFinder</h1>
           { backhref && 
             <div className="arrow-back" id="arrow-back-buildings">
               <Link to={backhref}>
