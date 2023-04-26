@@ -32,6 +32,16 @@
     cursor: pointer;
 }
 
+#btn-start:active {
+    -webkit-transform: scale(0.95);
+    -ms-transform: scale(0.95);
+    transform: scale(0.95);
+    
+    -webkit-transition-duration: 100ms;
+    -o-transition-duration: 100ms;
+    transition-duration: 100ms;
+}
+
 .inactive {
     display: none !important;
 }
@@ -67,6 +77,12 @@
 .lds-ring div:nth-child(3) {
     animation-delay: -0.15s;
 }  
+
+.btn-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
 
 @keyframes lds-ring {
     0% {
