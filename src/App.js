@@ -109,11 +109,10 @@ const initialize = async (roomsJson) => {
   //TODO revisar "CP", "K2", "ES"
   let building_blacklist = ["0", "", " -", "VIRT", "NOREQ", "SALA", "LIGA", "LAB"];
 
-  let actual_date = new Date("2023-03-03");
+  let actual_date = new Date();
 
   for (let element of response ) {
     for (let pattern of element.schedules) {
-
       let date_ini = new Date(pattern.date_ini);
       let date_fin = new Date(pattern.date_fin);
 
@@ -147,7 +146,6 @@ const initialize = async (roomsJson) => {
       }
     } 
   }
-
   return buildings;
 }
 
