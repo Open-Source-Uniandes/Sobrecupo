@@ -17,7 +17,7 @@ const Welcome = () => {
         <section>
             <article className="information">
                 <h2>¿Buscando salón?</h2>
-                <p>Sabemos que muchas veces estás en la universidad y quieres o necesitas conseguir un salón libre, y puede ser muy difícil encontrarlo o siquiera saber si hay alguno. <br/><br/> Sobrecupo es una plataforma web que te permite visualizar los salones que se encuentran disponibles en un momento específico de la semana, como por ejemplo... <b>¡Justo ahora!</b></p>
+                <p>Sabemos que muchas veces estás en la universidad y quieres o necesitas conseguir un salón libre, y puede ser muy difícil encontrarlo o siquiera saber si hay alguno. <br/><br/> AulaFinder es una plataforma web que te permite visualizar los salones que se encuentran disponibles en un momento específico de la semana, como por ejemplo... <b>¡Justo ahora!</b></p>
             </article>
 
             <article className="information">
@@ -41,15 +41,21 @@ const Welcome = () => {
 
           </section>
 
-          <section>
-            <div id="loading-placeholder" className={ctx.data === undefined ? '' : 'inactive'}>
-                <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
-                <p><em>Un momento por favor <br/> Estamos Hackeando Banner</em> <span role="img" aria-label="Nice">😎</span></p>
-            </div>
 
-            <Link to="/buildings" className="avoid-underline">
-              <button id="btn-start" className={ctx.data === undefined ? 'inactive' : ''} type="button">Encuentra salones</button>
-            </Link>
+          <section>
+            {
+              ctx.data === undefined ? 
+              <div id="loading-placeholder">
+                <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+                <p><em>Un momento por favor <br/> Estamos consultando Banner</em> <span role="img" aria-label="Nice">😎</span></p>
+              </div> 
+              :
+              <div className='btn-container'>
+                <Link to="/buildings" className="avoid-underline">
+                  <button id="btn-start" type="button">Encuentra salones</button>
+                </Link>
+              </div>
+            }
           </section>
         </main>
       </React.Fragment>
