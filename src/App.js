@@ -7,7 +7,7 @@ import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import Buildings from './Buildings/Buildings';
 import Classrooms from './Classrooms/Classrooms';
-import courseFile from './Data/courses.json';
+import courseFile from './Data/courses202410.json';
 import FloatingMailbox from 'react-floating-mailbox';
 
 
@@ -107,7 +107,10 @@ const initialize = async (roomsJson) => {
   const buildings = {};
   let response = roomsJson;
   //TODO revisar "CP", "K2", "ES"
-  let building_blacklist = ["0", "", " -", "VIRT", "NOREQ", "SALA", "LIGA", "LAB"];
+  let building_blacklist = [
+    "0", "", " -", "VIRT", "NOREQ", "SALA", "LIGA", "LAB", "FEDELLER", "ES", "FSFB", 
+    "HFONTIB", "HLSAMAR", "HLVICT", "HSBOLIV", "HSUBA", "IMI", "MEDLEG", "SVICENP", "ZIPAUF"
+  ];
 
   let actual_date = new Date();
 
