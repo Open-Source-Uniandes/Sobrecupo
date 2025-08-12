@@ -7,7 +7,7 @@ import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import Buildings from './Buildings/Buildings';
 import Classrooms from './Classrooms/Classrooms';
-import courseFile from './Data/courses202420.json';
+import courseFile from './Data/courses202520.json';
 import FloatingMailbox from 'react-floating-mailbox';
 
 
